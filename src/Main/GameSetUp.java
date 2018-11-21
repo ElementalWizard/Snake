@@ -8,6 +8,7 @@ import Game.GameStates.State;
 import Input.KeyManager;
 import Input.MouseManager;
 import Resources.Images;
+import Resources.MusicHandler;
 
 import javax.sound.sampled.*;
 import java.awt.*;
@@ -53,6 +54,9 @@ public class GameSetUp implements Runnable {
     private DataLine.Info info;
     private Clip audioClip;
 
+    private MusicHandler musicHandler;
+
+
     private BufferedImage loading;
 
     public GameSetUp(String title, int width, int height){
@@ -62,6 +66,8 @@ public class GameSetUp implements Runnable {
         this.title = title;
         keyManager = new KeyManager();
         mouseManager = new MouseManager();
+        musicHandler = new MusicHandler(handler);
+
 
     }
 
@@ -82,25 +88,13 @@ public class GameSetUp implements Runnable {
         menuState = new MenuState(handler);
         pauseState = new PauseState(handler);
 
+        musicHandler.set_changeMusic("res/music/UTheme.mp3");
+        musicHandler.play();
+        musicHandler.setLoop(true);
+        musicHandler.setVolume(0.25);
+
         State.setState(menuState);
 
-        try {
-
-            audioFile = getClass().getResourceAsStream("/music/nature.wav");
-            audioStream = AudioSystem.getAudioInputStream(audioFile);
-            format = audioStream.getFormat();
-            info = new DataLine.Info(Clip.class, format);
-            audioClip = (Clip) AudioSystem.getLine(info);
-            audioClip.open(audioStream);
-            audioClip.loop(Clip.LOOP_CONTINUOUSLY);
-
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        }
     }
 
     public void reStart(){
@@ -207,6 +201,11 @@ public class GameSetUp implements Runnable {
     public int getWidth(){
         return width;
     }
+
+    MusicHandler getMusicHandler() {
+        return musicHandler;
+    }
+
 
     public int getHeight(){
         return height;
