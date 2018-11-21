@@ -48,11 +48,6 @@ public class GameSetUp implements Runnable {
     public State pauseState;
 
     //Res.music
-    private InputStream audioFile;
-    private AudioInputStream audioStream;
-    private AudioFormat format;
-    private DataLine.Info info;
-    private Clip audioClip;
 
     private MusicHandler musicHandler;
 
